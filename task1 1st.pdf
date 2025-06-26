@@ -1,0 +1,80 @@
+CODTECH
+INTERNSHIP TASKS
+VLSI
+INTERNSHIP TASK -1
+ARITHMETIC LOGIC UNIT (ALU)
+• DESIGN A BASIC ALU SUPPORTING
+OPERATIONS LIKE ADDITION,SUBTRACTION,
+AND, OR, AND NOT.
+1. DESIGN
+• We are designing a 4-bit Arithmetic Logic Unit (ALU) that
+performs 5 operations based on a control input (sel):
+Operation Name
+sel Value
+Description
+ADD000Adds A and B
+SUB001Subtracts B from A
+AND010Bitwise AND between A and B
+OR011Bitwise OR between A and B
+NOT100Bitwise NOT of A (only A)
+2. VERILOG CODE
+Here is the Verilog HDL code for the ALU:module ALU (
+input [3:0] A,// 4-bit input A
+input [3:0] B,// 4-bit input B
+input [2:0] sel,// 3-bit selector
+output reg [3:0] Y// 4-bit result
+);
+always @(*) begin
+case (sel)
+3'b000: Y = A + B; // Addition
+3'b001: Y = A - B; // Subtraction
+3'b010: Y = A & B; // Bitwise AND
+3'b011: Y = A | B; // Bitwise OR
+3'b100: Y = ~A;
+// Bitwise NOT on A
+default: Y = 4'b0000;
+endcase
+end
+endmodule
+3. SIMULATION RESULTS
+module tb_ALU;
+reg [3:0] A, B;
+reg [2:0] sel;
+wire [3:0] Y;
+ALU uut (.A(A), .B(B), .sel(sel), .Y(Y));
+initial begin
+$display("Time\tA\tB\tSel\tY");
+$monitor("%g\t%b\t%b\t%b\t%b", $time, A, B, sel, Y);
+A = 4'b0011; B = 4'b0001; sel = 3'b000; #10; // ADDA = 4'b0100; B = 4'b0001; sel = 3'b001; #10; // SUB
+A = 4'b1100; B = 4'b1010; sel = 3'b010; #10; // AND
+A = 4'b1100; B = 4'b1010; sel = 3'b011; #10; // OR
+A = 4'b1100; sel = 3'b100; #10;
+// NOT A
+$finish;
+end
+endmodule
+Expected Output:
+Time A
+B
+Sel Y
+000110001 000 0100 (3 + 1 = 4)
+1001000001 001 0011 (4 - 1 = 3)
+2011001010 010 1000 (AND)
+3011001010 011 1110 (OR)
+401100xxxx 100 0011 (NOT A = ~1100)
+4. PERFORMANCE ANALYSIS
+Metric
+Analysis
+Bit-width4 bits for inputs and output
+TypeCombinational logic (no clock)
+Latency1 cycle (instant output when inputs change)
+AreaSmall: uses 4-bit adders, subtractors, logic gates
+Operations5 (ADD, SUB, AND, OR, NOT)
+PowerVery low (no memory or complex control logic)
+ScalabilityEasy to scale to 8/16/32 bitsComplete Summary Table
+Term
+Explanation
+DesignA 4-bit ALU that uses sel to pick between ADD, SUB, AND, OR, NOT
+Verilog CodeImplements all 5 operations using a case block
+SimulationTestbench applies input values and checks correct output
+PerformanceLow area and power; 1-cycle latency; scalable
